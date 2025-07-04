@@ -10,11 +10,13 @@ module CORDIC_Engine #(
     input signed [DATA_WIDTH - 1 : 0] in_alpha,
     input signed [DATA_WIDTH - 1 : 0] in_atan,
     input [$clog2(N_PE) : 0] i_count,
+    input [1:0] i_quadrant,
     input valid_in,
     
     output reg signed [DATA_WIDTH - 1 : 0] out_x = 0,
     output reg signed [DATA_WIDTH - 1 : 0] out_y = 0,
     output reg signed [DATA_WIDTH - 1 : 0] out_alpha = 0,
+    output reg [1:0] out_quadrant = 0,
     output reg valid_out = 0
 );
 
@@ -24,9 +26,11 @@ always @(posedge i_clk) begin
         out_y <= 0;
         out_alpha <= 0;
         valid_out <= 0;
+        out_quadrant <= 0;
     end
     else begin
         if(valid_in) begin
+            out_quadrant <= i_quadrant;
             if(in_alpha[DATA_WIDTH - 1] == 1'b0) begin
                 out_alpha <= in_alpha + ~(in_atan) + 1; 
                 out_x <= in_x - (in_y >>> i_count);
@@ -44,6 +48,7 @@ always @(posedge i_clk) begin
             out_alpha <= out_alpha;
             out_x <= out_x;
             out_y <= out_y;
+            out_quadrant <= out_quadrant;
             valid_out <= 1'b0;
         end
     end

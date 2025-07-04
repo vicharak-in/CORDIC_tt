@@ -73,6 +73,13 @@ module tb_top_CORDIC_Engine();
         #10 in_alpha = 18'hfd000;
         #10 in_alpha = 18'h03244; 
         #10 in_alpha = 18'hfcdbc;
+        #10 in_alpha = 18'h08000;
+        #10 in_alpha = 18'h0cccd;
+        #10 in_alpha = 18'h0f99a;
+        #10 in_alpha = 18'h13333;
+        #10 in_alpha = 18'h0_64_87;
+        #10 in_alpha = 18'h0_C9_09;
+        #10 in_alpha = 18'h1_2D_97;
         #10 i_valid_in = 1'b0;
 
         #800; // Wait for the CORDIC computation to finish
