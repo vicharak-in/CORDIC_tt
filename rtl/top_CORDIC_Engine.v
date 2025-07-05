@@ -195,6 +195,7 @@ module top_CORDIC_Engine#(
 
     always@(posedge i_clk) begin
         if(w_o_valid) begin
+		out_alpha <= w_o_alpha;
             case(w_quadrant)
                 2'b00: begin
                     out_costheta <= w_costheta;
