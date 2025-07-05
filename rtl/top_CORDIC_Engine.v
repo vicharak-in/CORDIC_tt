@@ -65,30 +65,34 @@ module top_CORDIC_Engine#(
     assign v2 = diff2[DATA_WIDTH-1];
     assign v3 = diff3[DATA_WIDTH-1];
 
+    wire [1:0] w_i_quadrant;
+    assign w_i_quadrant[1] = ~v1&~v2;
+    assign w_i_quadrant[0] = ~v1&(~(v2^v3));
+
     reg [1:0] quadrant;
     reg quadrant_valid;
     always@(posedge i_clk) begin
         if(diff_valid) begin
-            case({v1,v2,v3})
-                3'b111: begin 
+            case(w_i_quadrant)
+                2'b00: begin 
                     quadrant <= 2'b00; // Q1
                     quadrant_valid <= 1'b1;
                     r_i_alpha2 <= r_i_alpha1;
                 end
 
-                3'b011: begin
+                2'b01: begin
                     quadrant <= 2'b01; // Q2
                     quadrant_valid <= 1'b1;
                     r_i_alpha2 <= diff1;
                 end
 
-                3'b001: begin
+                2'b10: begin
                     quadrant <= 2'b10; // Q2
                     quadrant_valid <= 1'b1;
                     r_i_alpha2 <= diff2;
                 end
 
-                3'b000: begin
+                2'b11: begin
                     quadrant <= 2'b11;
                     quadrant_valid <= 1'b1;
                     r_i_alpha2 <= diff3;
