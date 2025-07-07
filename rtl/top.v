@@ -4,7 +4,6 @@ module top#(
 )(
     input i_clk,
     input i_RX_Serial,
-
     output o_Tx_Serial
 );
 
@@ -21,7 +20,7 @@ module top#(
     )
     uart_rx_inst (
         .i_Clock(i_clk),
-        .i_RX_Serial(uart_rx_i),
+        .i_RX_Serial(i_RX_Serial),
         .o_RX_DV(uart_rx_valid),
         .o_RX_Byte(uart_rx_byte)
     );
