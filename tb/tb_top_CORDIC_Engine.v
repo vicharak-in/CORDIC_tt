@@ -23,6 +23,7 @@ module tb_top_CORDIC_Engine();
 
     localparam DATA_WIDTH = 18;
     localparam N_PE = 15;
+
     top_CORDIC_Engine # (
         .DATA_WIDTH(DATA_WIDTH),
         .N_PE(N_PE)
@@ -77,9 +78,9 @@ module tb_top_CORDIC_Engine();
         #10 in_alpha = 18'h0cccd;
         #10 in_alpha = 18'h0f99a;
         #10 in_alpha = 18'h13333;
-        #10 in_alpha = 18'h0_64_87;
-        #10 in_alpha = 18'h0_C9_09;
-        #10 in_alpha = 18'h1_2D_97;
+        #10 in_alpha = 18'h06487;
+        #10 in_alpha = 18'h0c909;
+        #10 in_alpha = 18'h12d97;
         #10 i_valid_in = 1'b0;
 
         #800; // Wait for the CORDIC computation to finish
@@ -88,7 +89,7 @@ module tb_top_CORDIC_Engine();
         $fclose(f3);
         
         $display("Simulation finished successfully.\n");
-        $display("Anayzing results...");
+        $display("Analyzing results...");
 
         f1 = $fopen("input.txt", "r");
         f2 = $fopen("cos_output.txt", "r");
@@ -103,10 +104,11 @@ module tb_top_CORDIC_Engine();
             $fscanf(f2, "%h\n", r_out_costheta);
             $fscanf(f3, "%h\n", r_out_sintheta);
 
-            $display("Input angle: %f", r_in_alpha / (2**14.0)); 
-
-            $display("Expected Result, Cosine Output: %f, Sine Output: %f", $cos(r_in_alpha/2**14.0), $sin(r_in_alpha/2**14.0));
-            $display("CORDIC Result, Cosine Output: %f, Sine Output: %f \n", r_out_costheta / (2**14.0), r_out_sintheta / (2**14.0));
+            $display("--------------------------------------------");
+            $display("Input angle    : dec=%0d hex=%h -> rad=%f", r_in_alpha, r_in_alpha, r_in_alpha / (2**14.0));
+            $display("Expected       : cos=%f sin=%f", $cos(r_in_alpha/2**14.0), $sin(r_in_alpha/2**14.0));
+            $display("CORDIC Cosine  : dec=%0d hex=%h -> val=%f", r_out_costheta, r_out_costheta, r_out_costheta / (2**14.0));
+            $display("CORDIC Sine    : dec=%0d hex=%h -> val=%f\n", r_out_sintheta, r_out_sintheta, r_out_sintheta / (2**14.0));
         end
 
         $finish;
