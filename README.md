@@ -6,3 +6,8 @@
  - Accepts angle in radians
  - Input angle is compared with boundary limit of quadrant and mapped the input angle to either Q1 or Q4
  - Output of CORDIC Engine is post-processed (swapped and/or 2's complement) based on the quadrant of input angle falls in
+
+#### UART Pin-Outs
+
+1. RX - FPGA PIN 32
+2. TX - FPGA PIN 30
