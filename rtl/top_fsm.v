@@ -1,7 +1,7 @@
 module cordic_fsm #(
-    parameter DATA_WIDTH_CORDIC = 18,
+    parameter DATA_WIDTH_CORDIC = 16,
     parameter DATA_WIDTH_SPI = 8,
-    parameter N_PE = 15
+    parameter N_PE = 13
 )(
     input  wire                    i_clk,
     input  wire                    rst_n,
@@ -13,9 +13,11 @@ module cordic_fsm #(
 
     // SPI interface
     reg  [DATA_WIDTH_SPI-1:0] spi_tx_data;
-    wire [DATA_WIDTH_SPI-1:0] spi_rx_data;
+    wire [DATA_WIDTH_SPI-1:0] spi_rx_data;     
     wire spi_rx_valid;
     wire spi_tx_req;
+
+    reg [15:0] count;
 
     SPI_Slave #(
         .DATA_WIDTH(DATA_WIDTH_SPI)
@@ -65,14 +67,14 @@ module cordic_fsm #(
     reg [2:0] state;
     reg [3:0] rx_byte_count;
     reg [2:0] tx_byte_count;
-    reg [71:0] r_spi_rx_data;
-    reg [55:0] r_spi_tx_data;
+    reg [63:0] r_spi_rx_data;
+    reg [47:0] r_spi_tx_data;
     reg valid_cordic_angle;
 
-    assign in_x      = r_spi_rx_data[17:0];
-    assign in_y      = r_spi_rx_data[35:18];
-    assign in_alpha  = r_spi_rx_data[53:36];
-    assign in_atan_0 = r_spi_rx_data[71:54];
+    assign in_x      = r_spi_rx_data[15:0];
+    assign in_y      = r_spi_rx_data[31:16];
+    assign in_alpha  = r_spi_rx_data[47:32];
+    assign in_atan_0 = r_spi_rx_data[63:48];
 
     always @(posedge i_clk ) begin
         if (!rst_n) begin
@@ -101,7 +103,7 @@ module cordic_fsm #(
                     if (spi_rx_valid) begin
                         r_spi_rx_data[((rx_byte_count+1)*8)-1 -: 8] <= spi_rx_data;
                         rx_byte_count <= rx_byte_count + 1;
-                        if (rx_byte_count == 8) begin
+                        if (rx_byte_count == 7) begin
                             valid_cordic_angle <= 1;
                             state <= S_WAIT;
                         end
@@ -111,7 +113,7 @@ module cordic_fsm #(
                 S_WAIT: begin
                     valid_cordic_angle <= 0;
                     if (o_valid_out) begin
-                        r_spi_tx_data <= {2'b00, out_alpha, out_costheta, out_sintheta}; // 56 bits
+                        r_spi_tx_data <= {out_alpha, out_costheta, out_sintheta}; // 56 bits
                         state <= S_LOAD;
                     end
                 end
@@ -127,7 +129,7 @@ module cordic_fsm #(
                         spi_tx_data   <= r_spi_tx_data[15:8];
                         r_spi_tx_data <= r_spi_tx_data >> 8;
                         tx_byte_count <= tx_byte_count + 1;
-                        if (tx_byte_count == 7) begin
+                        if (tx_byte_count == 6) begin
                             state <= S_DONE;
                     end
                     end
@@ -136,6 +138,7 @@ module cordic_fsm #(
                 S_DONE: begin
                     if (cs_n) begin
                         state <= S_IDLE;
+                        count <= count + 1;
                     end
                 end
 

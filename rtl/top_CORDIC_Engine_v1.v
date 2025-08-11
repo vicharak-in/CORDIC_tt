@@ -30,9 +30,9 @@ module top_CORDIC_Engine_v1#(
 
     always@(posedge i_clk) begin
         if(i_valid_in) begin
-            diff1 <= in_alpha - 18'h0_64_88;
-            diff2 <= in_alpha - 18'h0_C9_10;
-            diff3 <= in_alpha - 18'h1_2D_98;
+            diff1 <= in_alpha - 16'h1922;
+            diff2 <= in_alpha - 16'h3244;
+            diff3 <= in_alpha - 16'h4b66;
             r_i_alpha1 <= in_alpha;
             diff_valid <= 1'b1;
         end
