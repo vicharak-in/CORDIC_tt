@@ -17,8 +17,6 @@ module cordic_fsm #(
     wire spi_rx_valid;
     wire spi_tx_req;
 
-    reg [15:0] count;
-
     SPI_Slave #(
         .DATA_WIDTH(DATA_WIDTH_SPI)
     ) spi_slave_inst (
@@ -138,7 +136,6 @@ module cordic_fsm #(
                 S_DONE: begin
                     if (cs_n) begin
                         state <= S_IDLE;
-                        count <= count + 1;
                     end
                 end
 

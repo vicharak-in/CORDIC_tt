@@ -28,8 +28,8 @@ module dynamic_atan#(
     wire [DATA_WIDTH-1:0] inv_2_pow_i;
     wire [DATA_WIDTH-1:0] inv_2_pow_3i;
 
-    assign inv_2_pow_i = 18'b000100000000000000 >> atan_counter;
-    assign inv_2_pow_3i = 18'b000100000000000000 >> 3*atan_counter; 
+    assign inv_2_pow_i = 16'b0001000000000000 >> atan_counter;
+    assign inv_2_pow_3i = 16'b0001000000000000 >> 3*atan_counter; 
 
     always@(posedge i_clk) begin
         if(!i_rstn) begin
