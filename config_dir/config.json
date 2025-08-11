@@ -2,7 +2,7 @@
     "DESIGN_NAME": "cordic_fsm",
     "VERILOG_FILES": "dir::src/*.v",
     "CLOCK_PORT": "i_clk",
-    "CLOCK_PERIOD": 10.0,
+    "CLOCK_PERIOD": 20.0,
     "CLOCK_NET": "ref::$CLOCK_PORT",
     "FP_PDN_VOFFSET": 7,
     "FP_PDN_HOFFSET": 7,
